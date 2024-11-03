@@ -8,6 +8,7 @@ Hashmap::Hashmap() {
 	items = (Item**)calloc(size, sizeof(Item*));
 }
 
+// деструк
 Hashmap::~Hashmap() {
 	for (int i = 0; i < size; ++i) {
 		Item* current = items[i];
