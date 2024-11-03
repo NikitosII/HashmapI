@@ -155,6 +155,7 @@ void Hashmap::menu() {
 		case 1:
 			if (Level >= size) {
 				std::cout << "Õýø-òàáëèöà ïåðåïîëíåíà.\n";
+				system("pause");
 			}
 			else {
 
