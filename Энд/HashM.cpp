@@ -3,7 +3,6 @@
 #include <regex>
 #include"Windows.h"
 
-
 Hashmap::Hashmap() {
 	size = 10;
 	items = (Item**)calloc(size, sizeof(Item*));
