@@ -3,13 +3,11 @@
 #include <regex>
 #include"Windows.h"
 
-// Êîíñòðóêòîð 
 Hashmap::Hashmap() {
 	size = 10;
 	items = (Item**)calloc(size, sizeof(Item*));
 }
 
-//Äåñòðóêòîð
 Hashmap::~Hashmap() {
 	for (int i = 0; i < size; ++i) {
 		Item* current = items[i];
@@ -33,22 +31,21 @@ long Hashmap::hashFunc(std::string data) {
 }
 
 
-//âñòàâêà 
 void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 
 	int index = hashFunc(data);
 	Item* current = items[index];
 
-	if (current == nullptr) { // åñëè â óêàçàòåëå íåò 
+	if (current == nullptr) { 
 		items[index] = new Item(key, data, key2);
 	}
-	else if (current->data == data) { // åñëè ýëåìåíò óæå ñóùåñòâóåò
+	else if (current->data == data) { 
 		current->key = key;
 		return;
 	}
 	else {
 		long i = 1;
-		long newIndex = (index + i * i) % size; // êâàäðàòè÷íîå îïðîáîâàíèå
+		long newIndex = (index + i * i) % size; 
 		while (items[newIndex] != nullptr) {
 			i++;
 			newIndex = (index + i * i) % size;
@@ -58,7 +55,7 @@ void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 	}
 }
 
-//ïîèñêè
+
 std::string Hashmap::getItem(std::string data) {
 	int index = hashFunc(data);
 	Item* current = items[index];
@@ -68,10 +65,10 @@ std::string Hashmap::getItem(std::string data) {
 		}
 		current = current->next;
 	}
-	return " "; // êëþ÷ íå íàéäåí
+	return " "; 
 }
 
-//óäàëåíèå
+
 void Hashmap::deleteItem(std::string data) {
 	long index = hashFunc(data);
 
@@ -80,13 +77,13 @@ void Hashmap::deleteItem(std::string data) {
 
 	while (current != nullptr) {
 		if (current->data == data) {
-			if (prev == nullptr) { // Óäàëÿåìûé ýëåìåíò íàõîäèòñÿ â íà÷àëå
+			if (prev == nullptr) { 
 				items[index] = current->next;
 			}
 			else {
 				prev->next = current->next;
 			}
-			delete current; // Îñâîáîæäàåì ïàìÿòü
+			delete current; 
 			return;
 		}
 		prev = current;
@@ -94,7 +91,7 @@ void Hashmap::deleteItem(std::string data) {
 	}
 }
 
-// âûâîä èíôû
+
 void Hashmap::displayHashmap() {
 	for (int i = 0; i < size; i++) {
 		Item* current = items[i];
@@ -107,8 +104,6 @@ void Hashmap::displayHashmap() {
 	}
 }
 
-//////////////////////////////////////////////////////////////
-// Ïðîâåðêè 
 bool Hashmap::isValidData(const std::string& data) {
 	if (data.length() != 5 || !std::all_of(data.begin(), data.end(), ::isdigit)) {
 		return false;
@@ -132,9 +127,8 @@ bool Hashmap::isValidKey2(const std::string& key2) {
 	std::regex pattern("^\\d{2}\\.\\d{2}\\.\\d{4}$");
 	return std::regex_match(key2, pattern);
 }
-//////////////////////////////////////////////////////////////
 
-// System("pause")
+
 void Hashmap::menu() {
 
 	int choice;
@@ -163,29 +157,26 @@ void Hashmap::menu() {
 					std::cout << "Enter ÔÈÎ: ";
 					std::cin.ignore();
 					std::getline(std::cin, key);
-					if (!isValidKey(key)) {
-						std::cout << "Íåâåðíàÿ ÔÈÎ. Ïîïðîáóé ñíîâà.\n";
-						continue; // Çàïðàøèâàåì ââîä ñíîâà
-					}
 
-					std::cout << "Enter íîìåð äîãîâîðà (èç 5 öèôð): ";
-					std::cin >> data;
+					do {
+						std::cout << "Enter ФИО: ";
+						std::cin.ignore();
+						std::getline(std::cin, key);
 
-					if (!isValidData(data)) {
-						std::cout << "Íåâåðíûé íîìåð äîãîâîðà. Ïîïðîáóé ñíîâà.\n";
+					} while (!isValidKey(key));
 
-						continue; // Çàïðàøèâàåì ââîä ñíîâà
-					}
+					do {
+						std::cout << "Enter номер договора (из 5 цифр): ";
+						std::cin >> data;
 
-					std::cout << "Enter äð (ää.ìì.ãããã): ";
-					std::cin >> key2;
-					if (!isValidKey2(key2)) {
-						std::cout << "Íåâåðíàÿ äàòà. Ïîïðîáóé ñíîâà.\n";
+					} while (!isValidData(data));
 
-						continue; // Çàïðàøèâàåì ââîä ñíîâà
-					}
+					do {
+						std::cout << "Enter др (дд.мм.гггг): ";
+						std::cin >> key2;
 
-					// Åñëè âñå äàííûå êîððåêòíû, âñòàâëÿåì 
+					} while (!isValidKey2(key2));
+
 					insertItem(key, data, key2);
 					Level++;
 					break; 
@@ -243,9 +234,8 @@ void Hashmap::menu() {
 	} while (choice != 0);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////// Ôóíêöèè äëÿ ïîèñêà ñ KMP
 
-// âû÷èñëÿåò ïðåôèêñíûå ôóíêöèè
+
 std::vector<int> Hashmap::prefix_function(const std::string& pattern) {
 	int n = pattern.length();
 	std::vector<int> pi(n, 0);
@@ -262,35 +252,35 @@ std::vector<int> Hashmap::prefix_function(const std::string& pattern) {
 	return pi;
 }
 
-// Ïîèñê ïîäñòðîêè
+
 std::vector<int> Hashmap::KMPSearch(const std::string& text, const std::string& pattern) {
 	std::vector<int> positions;
 	std::vector<int> pi = prefix_function(pattern);
-	int n = text.length();// Äëèíà òåêñòà
-	int m = pattern.length();// Äëèíà øàáëîíà
+	int n = text.length();
+	int m = pattern.length();
 	int q = 0;
 	for (int i = 0; i < n; ++i) {
 		while (q > 0 && pattern[q] != text[i]) {
 			q = pi[q - 1]; 
 		}
-		if (pattern[q] == text[i]) { // Åñëè ñèìâîëû ñîâïàäàþò, óâåëè÷èâàåì q
+		if (pattern[q] == text[i]) { 
 			++q;
 		}
-		if (q == m) { // Åñëè âåñü øàáëîí ñîâïàë 
-			positions.push_back(i - m + 1); // Äîáàâëÿåì ïîçèöèþ âõîæäåíèÿ â âåêòîð ïîçèöèé 
-			q = pi[q - 1]; // Âîçâðàùàåìñÿ ê íà÷àëó øàáëîíà äëÿ ïîèñêà ñëåäóþùåãî âõîæäåíèÿ
+		if (q == m) {
+			positions.push_back(i - m + 1); 
+			q = pi[q - 1];
 		}
 	}
 	return positions;
 }
 
-// èùåò âñå çàïèñè â õýø - òàáëèöå
+
 std::vector<std::string> Hashmap::search(const std::string& fragment) {
-	std::vector<std::string> results; // Âåêòîð äëÿ õðàíåíèÿ íàéäåííûõ 
+	std::vector<std::string> results; 
 	for (int i = 0; i < size; ++i) {
 		if (items[i] != nullptr) {
 			std::vector<int> positions = KMPSearch(items[i]->data, fragment);
-			if (!positions.empty()) { // Åñëè íàéäåí
+			if (!positions.empty()) { 
 				results.push_back(items[i]->key);
 			}
 		}
