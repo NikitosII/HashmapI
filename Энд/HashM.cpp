@@ -3,13 +3,13 @@
 #include <regex>
 #include"Windows.h"
 
-// Конструктор 
+// ГЉГ®Г­Г±ГІГ°ГіГЄГІГ®Г° 
 Hashmap::Hashmap() {
 	size = 10;
 	items = (Item**)calloc(size, sizeof(Item*));
 }
 
-//Деструктор
+//Г„ГҐГ±ГІГ°ГіГЄГІГ®Г°
 Hashmap::~Hashmap() {
 	for (int i = 0; i < size; ++i) {
 		Item* current = items[i];
@@ -33,22 +33,22 @@ long Hashmap::hashFunc(std::string data) {
 }
 
 
-//вставка 
+//ГўГ±ГІГ ГўГЄГ  
 void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 
 	int index = hashFunc(data);
 	Item* current = items[index];
 
-	if (current == nullptr) { // если в указателе нет 
+	if (current == nullptr) { // ГҐГ±Г«ГЁ Гў ГіГЄГ Г§Г ГІГҐГ«ГҐ Г­ГҐГІ 
 		items[index] = new Item(key, data, key2);
 	}
-	else if (current->data == data) { // если элемент уже существует
+	else if (current->data == data) { // ГҐГ±Г«ГЁ ГЅГ«ГҐГ¬ГҐГ­ГІ ГіГ¦ГҐ Г±ГіГ№ГҐГ±ГІГўГіГҐГІ
 		current->key = key;
 		return;
 	}
 	else {
 		long i = 1;
-		long newIndex = (index + i * i) % size; // квадратичное опробование
+		long newIndex = (index + i * i) % size; // ГЄГўГ Г¤Г°Г ГІГЁГ·Г­Г®ГҐ Г®ГЇГ°Г®ГЎГ®ГўГ Г­ГЁГҐ
 		while (items[newIndex] != nullptr) {
 			i++;
 			newIndex = (index + i * i) % size;
@@ -58,7 +58,7 @@ void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 	}
 }
 
-//поиски
+//ГЇГ®ГЁГ±ГЄГЁ
 std::string Hashmap::getItem(std::string data) {
 	int index = hashFunc(data);
 	Item* current = items[index];
@@ -68,10 +68,10 @@ std::string Hashmap::getItem(std::string data) {
 		}
 		current = current->next;
 	}
-	return " "; // ключ не найден
+	return " "; // ГЄГ«ГѕГ· Г­ГҐ Г­Г Г©Г¤ГҐГ­
 }
 
-//удаление
+//ГіГ¤Г Г«ГҐГ­ГЁГҐ
 void Hashmap::deleteItem(std::string data) {
 	long index = hashFunc(data);
 
@@ -80,13 +80,13 @@ void Hashmap::deleteItem(std::string data) {
 
 	while (current != nullptr) {
 		if (current->data == data) {
-			if (prev == nullptr) { // Удаляемый элемент находится в начале
+			if (prev == nullptr) { // Г“Г¤Г Г«ГїГҐГ¬Г»Г© ГЅГ«ГҐГ¬ГҐГ­ГІ Г­Г ГµГ®Г¤ГЁГІГ±Гї Гў Г­Г Г·Г Г«ГҐ
 				items[index] = current->next;
 			}
 			else {
 				prev->next = current->next;
 			}
-			delete current; // Освобождаем память
+			delete current; // ГЋГ±ГўГ®ГЎГ®Г¦Г¤Г ГҐГ¬ ГЇГ Г¬ГїГІГј
 			return;
 		}
 		prev = current;
@@ -94,7 +94,7 @@ void Hashmap::deleteItem(std::string data) {
 	}
 }
 
-// вывод инфы
+// ГўГ»ГўГ®Г¤ ГЁГ­ГґГ»
 void Hashmap::displayHashmap() {
 	for (int i = 0; i < size; i++) {
 		Item* current = items[i];
@@ -108,7 +108,7 @@ void Hashmap::displayHashmap() {
 }
 
 //////////////////////////////////////////////////////////////
-// Проверки 
+// ГЏГ°Г®ГўГҐГ°ГЄГЁ 
 bool Hashmap::isValidData(const std::string& data) {
 	if (data.length() != 5 || !std::all_of(data.begin(), data.end(), ::isdigit)) {
 		return false;
@@ -142,49 +142,50 @@ void Hashmap::menu() {
 	std::string key, data, key2;
 
 	do {
-		std::cout << "•1 Добавление записи \n";
-		std::cout << "•2 Поиск\n";
-		std::cout << "•3 Удаление записи\n";
-		std::cout << "•4 Просмотр всех имеющихся записей\n";
-		std::cout << "•5 Поиск по фрагменту\n";
-		std::cout << "•0 Выход\n";
-		std::cout << "Введите ноиер пункта(0-5): ";
+		std::cout << "вЂў1 Г„Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ Г§Г ГЇГЁГ±ГЁ \n";
+		std::cout << "вЂў2 ГЏГ®ГЁГ±ГЄ\n";
+		std::cout << "вЂў3 Г“Г¤Г Г«ГҐГ­ГЁГҐ Г§Г ГЇГЁГ±ГЁ\n";
+		std::cout << "вЂў4 ГЏГ°Г®Г±Г¬Г®ГІГ° ГўГ±ГҐГµ ГЁГ¬ГҐГѕГ№ГЁГµГ±Гї Г§Г ГЇГЁГ±ГҐГ©\n";
+		std::cout << "вЂў5 ГЏГ®ГЁГ±ГЄ ГЇГ® ГґГ°Г ГЈГ¬ГҐГ­ГІГі\n";
+		std::cout << "вЂў0 Г‚Г»ГµГ®Г¤\n";
+		std::cout << "Г‚ГўГҐГ¤ГЁГІГҐ Г­Г®ГЁГҐГ° ГЇГіГ­ГЄГІГ (0-5): ";
 		std::cin >> choice;
 
 		switch (choice) {
 		case 1:
 			if (Level >= size) {
-				std::cout << "Хэш-таблица переполнена.\n";
+				std::cout << "Г•ГЅГё-ГІГ ГЎГ«ГЁГ¶Г  ГЇГҐГ°ГҐГЇГ®Г«Г­ГҐГ­Г .\n";
+				system("pause");
 			}
 			else {
 
 				while (true) {
-					std::cout << "Enter ФИО: ";
+					std::cout << "Enter Г”Г€ГЋ: ";
 					std::cin.ignore();
 					std::getline(std::cin, key);
 					if (!isValidKey(key)) {
-						std::cout << "Неверная ФИО. Попробуй снова.\n";
-						continue; // Запрашиваем ввод снова
+						std::cout << "ГЌГҐГўГҐГ°Г­Г Гї Г”Г€ГЋ. ГЏГ®ГЇГ°Г®ГЎГіГ© Г±Г­Г®ГўГ .\n";
+						continue; // Г‡Г ГЇГ°Г ГёГЁГўГ ГҐГ¬ ГўГўГ®Г¤ Г±Г­Г®ГўГ 
 					}
 
-					std::cout << "Enter номер договора (из 5 цифр): ";
+					std::cout << "Enter Г­Г®Г¬ГҐГ° Г¤Г®ГЈГ®ГўГ®Г°Г  (ГЁГ§ 5 Г¶ГЁГґГ°): ";
 					std::cin >> data;
 
 					if (!isValidData(data)) {
-						std::cout << "Неверный номер договора. Попробуй снова.\n";
+						std::cout << "ГЌГҐГўГҐГ°Г­Г»Г© Г­Г®Г¬ГҐГ° Г¤Г®ГЈГ®ГўГ®Г°Г . ГЏГ®ГЇГ°Г®ГЎГіГ© Г±Г­Г®ГўГ .\n";
 
-						continue; // Запрашиваем ввод снова
+						continue; // Г‡Г ГЇГ°Г ГёГЁГўГ ГҐГ¬ ГўГўГ®Г¤ Г±Г­Г®ГўГ 
 					}
 
-					std::cout << "Enter др (дд.мм.гггг): ";
+					std::cout << "Enter Г¤Г° (Г¤Г¤.Г¬Г¬.ГЈГЈГЈГЈ): ";
 					std::cin >> key2;
 					if (!isValidKey2(key2)) {
-						std::cout << "Неверная дата. Попробуй снова.\n";
+						std::cout << "ГЌГҐГўГҐГ°Г­Г Гї Г¤Г ГІГ . ГЏГ®ГЇГ°Г®ГЎГіГ© Г±Г­Г®ГўГ .\n";
 
-						continue; // Запрашиваем ввод снова
+						continue; // Г‡Г ГЇГ°Г ГёГЁГўГ ГҐГ¬ ГўГўГ®Г¤ Г±Г­Г®ГўГ 
 					}
 
-					// Если все данные корректны, вставляем 
+					// Г…Г±Г«ГЁ ГўГ±ГҐ Г¤Г Г­Г­Г»ГҐ ГЄГ®Г°Г°ГҐГЄГІГ­Г», ГўГ±ГІГ ГўГ«ГїГҐГ¬ 
 					insertItem(key, data, key2);
 					Level++;
 					break; 
@@ -195,14 +196,14 @@ void Hashmap::menu() {
 
 			break;
 		case 2:
-			std::cout << "Введите данные для поиска: ";
+			std::cout << "Г‚ГўГҐГ¤ГЁГІГҐ Г¤Г Г­Г­Г»ГҐ Г¤Г«Гї ГЇГ®ГЁГ±ГЄГ : ";
 			std::cin >> data;
-			std::cout << "Результат : " << getItem(data) << std::endl;
+			std::cout << "ГђГҐГ§ГіГ«ГјГІГ ГІ : " << getItem(data) << std::endl;
 			system("pause");
 			system("cls");
 			break;
 		case 3:
-			std::cout << "Введите данные для удаления ( номер договора ): ";
+			std::cout << "Г‚ГўГҐГ¤ГЁГІГҐ Г¤Г Г­Г­Г»ГҐ Г¤Г«Гї ГіГ¤Г Г«ГҐГ­ГЁГї ( Г­Г®Г¬ГҐГ° Г¤Г®ГЈГ®ГўГ®Г°Г  ): ";
 			std::cin >> data;
 			deleteItem(data);
 			Level--;
@@ -218,13 +219,13 @@ void Hashmap::menu() {
 			std::cin >> key2;
 			std::vector<std::string> results = search(key2);
 			if (!results.empty()) {
-				std::cout << "Найденные записи:\n";
+				std::cout << "ГЌГ Г©Г¤ГҐГ­Г­Г»ГҐ Г§Г ГЇГЁГ±ГЁ:\n";
 				for (const std::string& result : results) {
 					std::cout << result << std::endl;
 				}
 			}
 			else {
-				std::cout << "Ничего не найдено.\n";
+				std::cout << "ГЌГЁГ·ГҐГЈГ® Г­ГҐ Г­Г Г©Г¤ГҐГ­Г®.\n";
 			}
 			system("pause");
 			system("cls");
@@ -234,7 +235,7 @@ void Hashmap::menu() {
 		case 0:
 			break;
 		default:
-			std::cout << "Неверный выбор. \n";
+			std::cout << "ГЌГҐГўГҐГ°Г­Г»Г© ГўГ»ГЎГ®Г°. \n";
 			system("pause");
 			system("cls");
 			break;
@@ -242,9 +243,9 @@ void Hashmap::menu() {
 	} while (choice != 0);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////// Функции для поиска с KMP
+///////////////////////////////////////////////////////////////////////////////////////// Г”ГіГ­ГЄГ¶ГЁГЁ Г¤Г«Гї ГЇГ®ГЁГ±ГЄГ  Г± KMP
 
-// вычисляет префиксные функции
+// ГўГ»Г·ГЁГ±Г«ГїГҐГІ ГЇГ°ГҐГґГЁГЄГ±Г­Г»ГҐ ГґГіГ­ГЄГ¶ГЁГЁ
 std::vector<int> Hashmap::prefix_function(const std::string& pattern) {
 	int n = pattern.length();
 	std::vector<int> pi(n, 0);
@@ -261,35 +262,35 @@ std::vector<int> Hashmap::prefix_function(const std::string& pattern) {
 	return pi;
 }
 
-// Поиск подстроки
+// ГЏГ®ГЁГ±ГЄ ГЇГ®Г¤Г±ГІГ°Г®ГЄГЁ
 std::vector<int> Hashmap::KMPSearch(const std::string& text, const std::string& pattern) {
 	std::vector<int> positions;
 	std::vector<int> pi = prefix_function(pattern);
-	int n = text.length();// Длина текста
-	int m = pattern.length();// Длина шаблона
+	int n = text.length();// Г„Г«ГЁГ­Г  ГІГҐГЄГ±ГІГ 
+	int m = pattern.length();// Г„Г«ГЁГ­Г  ГёГ ГЎГ«Г®Г­Г 
 	int q = 0;
 	for (int i = 0; i < n; ++i) {
 		while (q > 0 && pattern[q] != text[i]) {
 			q = pi[q - 1]; 
 		}
-		if (pattern[q] == text[i]) { // Если символы совпадают, увеличиваем q
+		if (pattern[q] == text[i]) { // Г…Г±Г«ГЁ Г±ГЁГ¬ГўГ®Г«Г» Г±Г®ГўГЇГ Г¤Г ГѕГІ, ГіГўГҐГ«ГЁГ·ГЁГўГ ГҐГ¬ q
 			++q;
 		}
-		if (q == m) { // Если весь шаблон совпал 
-			positions.push_back(i - m + 1); // Добавляем позицию вхождения в вектор позиций 
-			q = pi[q - 1]; // Возвращаемся к началу шаблона для поиска следующего вхождения
+		if (q == m) { // Г…Г±Г«ГЁ ГўГҐГ±Гј ГёГ ГЎГ«Г®Г­ Г±Г®ГўГЇГ Г« 
+			positions.push_back(i - m + 1); // Г„Г®ГЎГ ГўГ«ГїГҐГ¬ ГЇГ®Г§ГЁГ¶ГЁГѕ ГўГµГ®Г¦Г¤ГҐГ­ГЁГї Гў ГўГҐГЄГІГ®Г° ГЇГ®Г§ГЁГ¶ГЁГ© 
+			q = pi[q - 1]; // Г‚Г®Г§ГўГ°Г Г№Г ГҐГ¬Г±Гї ГЄ Г­Г Г·Г Г«Гі ГёГ ГЎГ«Г®Г­Г  Г¤Г«Гї ГЇГ®ГЁГ±ГЄГ  Г±Г«ГҐГ¤ГіГѕГ№ГҐГЈГ® ГўГµГ®Г¦Г¤ГҐГ­ГЁГї
 		}
 	}
 	return positions;
 }
 
-// ищет все записи в хэш - таблице
+// ГЁГ№ГҐГІ ГўГ±ГҐ Г§Г ГЇГЁГ±ГЁ Гў ГµГЅГё - ГІГ ГЎГ«ГЁГ¶ГҐ
 std::vector<std::string> Hashmap::search(const std::string& fragment) {
-	std::vector<std::string> results; // Вектор для хранения найденных 
+	std::vector<std::string> results; // Г‚ГҐГЄГІГ®Г° Г¤Г«Гї ГµГ°Г Г­ГҐГ­ГЁГї Г­Г Г©Г¤ГҐГ­Г­Г»Гµ 
 	for (int i = 0; i < size; ++i) {
 		if (items[i] != nullptr) {
 			std::vector<int> positions = KMPSearch(items[i]->data, fragment);
-			if (!positions.empty()) { // Если найден
+			if (!positions.empty()) { // Г…Г±Г«ГЁ Г­Г Г©Г¤ГҐГ­
 				results.push_back(items[i]->key);
 			}
 		}
