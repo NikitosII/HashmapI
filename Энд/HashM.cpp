@@ -22,7 +22,7 @@ Hashmap::~Hashmap() {
 	items = nullptr;
 }
 
-// хэш-функция 
+// хэш-функция  
 long Hashmap::hashFunc(std::string data) {
 	long sum = 0;
 	for (int i = 0; i < data.length(); i++) {
