@@ -72,25 +72,30 @@ std::string Hashmap::getItem(std::string data) {
 // удаление data
 void Hashmap::deleteItem(std::string data) {
 	long index = hashFunc(data);
-
-	Item* prev = nullptr;
 	Item* current = items[index];
 
-	while (current != nullptr) {
-		if (current->data == data) {
-			if (prev == nullptr) { 
-				items[index] = current->next;
+	if (current->data == data) { // if сразу нашли на своём месте 
+		delete current;
+		items[index] = nullptr;
+		return;
+	}
+	else {
+		long i = 1;
+		long newIndex = (index + i * i) % size; 
+
+		while (items[newIndex] != nullptr) {
+			if (items[newIndex]->data == data) {
+				delete items[newIndex];
+				items[newIndex] = nullptr;
+				return;
 			}
-			else {
-				prev->next = current->next;
-			}
-			delete current; 
-			return;
+			i++;
+			newIndex = (index + i * i) % size;
 		}
-		prev = current;
-		current = current->next;
+		
 	}
 }
+
 
 // вывод всего 
 void Hashmap::displayHashmap() {
