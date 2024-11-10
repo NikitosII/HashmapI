@@ -60,13 +60,23 @@ void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 std::string Hashmap::getItem(std::string data) {
 	int index = hashFunc(data);
 	Item* current = items[index];
-	while (current != nullptr) {
-		if (current->data == data) {
-			return current->key;
-		}
-		current = current->next;
+
+	if (current->data == data) { // if сразу нашли на своём месте 
+		return current->key;
 	}
-	return " "; 
+	else {
+		long i = 1;
+		long newIndex = (index + i * i) % size;
+
+		while (items[newIndex] != nullptr) {
+			if (items[newIndex]->data == data) {
+				return items[newIndex]->key;
+			}
+			i++;
+			newIndex = (index + i * i) % size;
+		}
+	}
+	return " "; // ключ не найден
 }
 
 // удаление data
