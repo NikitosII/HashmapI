@@ -70,7 +70,7 @@ std::string Hashmap::getItem(std::string data) {
 		long i = 1;
 		long newIndex = (index + i * i) % size;
 
-		while (items[newIndex] != nullptr || items[newIndex]->deleted != true) {
+		while (items[newIndex] != nullptr && items[newIndex]->deleted != true) {
 			if (items[newIndex]->data == data) {
 				return items[newIndex]->key;
 			}
