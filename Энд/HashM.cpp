@@ -37,7 +37,7 @@ void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 	int index = hashFunc(data);
 	Item* current = items[index];
 
-	if (current == nullptr) { 
+	if (current == nullptr || current->data == "Deleted") { 
 		items[index] = new Item(key, data, key2);
 	}
 	else if (current->data == data) { 
@@ -47,7 +47,7 @@ void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 	else {
 		long i = 1;
 		long newIndex = (index + i * i) % size; 
-		while (items[newIndex] != nullptr) {
+		while (items[newIndex] != nullptr && items[newIndex]->data != "Deleted") {
 			i++;
 			newIndex = (index + i * i) % size;
 		}
@@ -86,7 +86,7 @@ void Hashmap::deleteItem(std::string data) {
 
 	if (current->data == data) { // if сразу нашли на своём месте 
 		delete current;
-		items[index] = nullptr;
+		items[index] = new Item("", "Deleted", "");
 		return;
 	}
 	else {
@@ -96,7 +96,7 @@ void Hashmap::deleteItem(std::string data) {
 		while (items[newIndex] != nullptr) {
 			if (items[newIndex]->data == data) {
 				delete items[newIndex];
-				items[newIndex] = nullptr;
+				items[newIndex] = new Item("", "Deleted", ""); // вместо nullptr
 				return;
 			}
 			i++;
