@@ -37,21 +37,23 @@ void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 	int index = hashFunc(data);
 	Item* current = items[index];
 
-	if (current == nullptr || current->data == "Deleted") { 
+	if (current == nullptr || current->deleted == true) {
 		items[index] = new Item(key, data, key2);
+		items[index]->deleted = false;
 	}
-	else if (current->data == data) { 
+	else if (current->data == data) {
 		current->key = key;
 		return;
 	}
 	else {
 		long i = 1;
-		long newIndex = (index + i * i) % size; 
-		while (items[newIndex] != nullptr && items[newIndex]->data != "Deleted") {
+		long newIndex = (index + i * i) % size;
+		while (items[newIndex] != nullptr && items[newIndex]->deleted != true) {
 			i++;
 			newIndex = (index + i * i) % size;
 		}
 		items[newIndex] = new Item(key, data, key2);
+		items[newIndex]->deleted = false;
 		return;
 	}
 }
@@ -68,7 +70,7 @@ std::string Hashmap::getItem(std::string data) {
 		long i = 1;
 		long newIndex = (index + i * i) % size;
 
-		while (items[newIndex] != nullptr) {
+		while (items[newIndex] != nullptr || items[newIndex]->deleted != true) {
 			if (items[newIndex]->data == data) {
 				return items[newIndex]->key;
 			}
@@ -86,23 +88,23 @@ void Hashmap::deleteItem(std::string data) {
 
 	if (current->data == data) { // if сразу нашли на своём месте 
 		delete current;
-		items[index] = new Item("", "Deleted", "");
+		items[index] = new Item("", "", "", true); // вместо nullptr
 		return;
 	}
 	else {
 		long i = 1;
-		long newIndex = (index + i * i) % size; 
+		long newIndex = (index + i * i) % size;
 
 		while (items[newIndex] != nullptr) {
 			if (items[newIndex]->data == data) {
 				delete items[newIndex];
-				items[newIndex] = new Item("", "Deleted", ""); // вместо nullptr
+				items[newIndex] = new Item("", "", "", true); // вместо nullptr
 				return;
 			}
 			i++;
 			newIndex = (index + i * i) % size;
 		}
-		
+
 	}
 }
 
@@ -113,9 +115,14 @@ void Hashmap::displayHashmap() {
 		Item* current = items[i];
 
 		while (current != nullptr) {
-
-			std::cout << current->key << " - " << current->data << " - " << current->key2 << std::endl;
-			current = current->next;
+			if (current->deleted == true) {
+				break;
+			}
+			else {
+				std::cout << current->key << " - " << current->data << " - " << current->key2 << std::endl;
+				current = current->next;
+			}
+			
 		}
 	}
 }
