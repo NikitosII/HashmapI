@@ -59,10 +59,11 @@ void Hashmap::insertItem(std::string key, std::string data, std::string key2) {
 		items[index] = new Item(key, data, key2);
 		items[index]->deleted = false;
 	}
-	else if (current->data == data) {
-		current->key = key;
-		return;
-	}
+	else if (current->key == key) {
+    		current->data = data;
+    		current->key2 = key2;
+   		return;
+		}
 	else {
 		long i = 1;
 		long newIndex = (index + i * i) % size;
