@@ -3,23 +3,17 @@
 #include <regex>
 #include"Windows.h"
 
+// Конструктор 
 Hashmap::Hashmap() {
-	size = 10;
-	items = (Item**)calloc(size, sizeof(Item*));
+    size = 5;
+    items.resize(size);
+    for (int i = 0; i < size; i++)
+        items[i] = nullptr;
 }
 
 // деструк
 Hashmap::~Hashmap() {
-	for (int i = 0; i < size; ++i) {
-		Item* current = items[i];
-		while (current != nullptr) {
-			Item* next = current->next;
-			delete current;
-			current = next;
-		}
-	}
-	free(items);
-	items = nullptr;
+        items.clear();
 }
 
 // хэш-функция  
@@ -29,6 +23,30 @@ long Hashmap::hashFunc(std::string data) {
 		sum += data[i];
 	}
 	return (sum % size);
+}
+
+// рехеширование
+void Hashmap::resize() {
+    int newSize = size * 2;
+    std::vector<Item*> newItems;
+
+    int oldSize = size;
+    size = newSize;
+
+    for (int i = 0; i < oldSize; ++i) {
+        Item* current = items[i];
+        if (current != nullptr && !current->deleted) {
+            int index = hashFunc(current->data);
+            while (newItems[index] != nullptr) {
+                int j = 1;
+                index = (index + j*j) % size;
+            }
+            newItems[index] = current;
+        }
+    }
+
+    items.clear();
+    items = newItems;
 }
 
 // добавление 
@@ -114,15 +132,9 @@ void Hashmap::displayHashmap() {
 	for (int i = 0; i < size; i++) {
 		Item* current = items[i];
 
-		while (current != nullptr) {
-			if (current->deleted == true) {
-				break;
-			}
-			else {
-				std::cout << current->key << " - " << current->data << " - " << current->key2 << std::endl;
-				current = current->next;
-			}
-			
+		if(current != nullptr && current->deleted != true ) {
+
+			std::cout << current->key << " - " << current->data << " - " << current->key2 << std::endl;
 		}
 	}
 }
@@ -209,10 +221,9 @@ void Hashmap::menu() {
 
 		switch (choice) {
 		case 1: {
-			if (Level >= size) {
-				std::cout << "Хэш-таблица переполнена.\n";
-				system("pause");
-				system("cls");
+			if (Level >= size * 0.5) {
+    				std::cout << "ресайз";
+    				resize();
 			}
 			else {
 
@@ -318,7 +329,7 @@ std::vector<int> Hashmap::prefix_function(const std::string& pattern) {
 	return pi;
 }
 
-Поиск подстроки
+// Поиск подстроки
 std::vector<int> Hashmap::KMPSearch(const std::string& text, const std::string& pattern) {
 	std::vector<int> positions;
 	std::vector<int> pi = prefix_function(pattern);
