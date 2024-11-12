@@ -6,7 +6,7 @@
 class Hashmap {
 private:
 	int size;
-	Item** items;
+	std::vector<Item*> items;
 
 public:
 	Hashmap();
